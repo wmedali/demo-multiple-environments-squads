@@ -1,22 +1,34 @@
 /// <reference types="cypress" />
-// ***********************************************************
-// This example plugins/index.js can be used to load plugins
-//
-// You can change the location of this file or turn off loading
-// the plugins file with the 'pluginsFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/plugins-guide
-// ***********************************************************
 
-// This function is called when a project is opened or re-opened (e.g. due to
-// the project's config changing)
+const getBaseUrl = (environment) => {
+  switch (environment) {
+    case "dev":
+      return "https://google.com";
+    case "qa":
+      return "https://google.com";
+    case "pre-prod":
+      return "https://google.com";
+    default:
+      return "https://google.com";
+  }
+};
 
-/**
- * @type {Cypress.PluginConfig}
- */
-// eslint-disable-next-line no-unused-vars
+const getIntegrationFolder = (teamName) => {
+  switch (teamName) {
+    case "plasma":
+      return "cypress/integration/plasma";
+    case "rocket":
+      return "cypress/integration/rocket";
+    case "skull":
+      return "cypress/integration/skull";
+    default:
+      return "cypress/integration";
+  }
+};
+
 module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-}
+  config.baseUrl = getBaseUrl(config.env.environment);
+  config.integrationFolder = getIntegrationFolder(config.env.team);
+
+  return config;
+};
