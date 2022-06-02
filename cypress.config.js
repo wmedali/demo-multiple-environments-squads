@@ -1,5 +1,4 @@
-/// <reference types="cypress" />
-
+const { defineConfig } = require("cypress");
 const getBaseUrl = (environment) => {
   switch (environment) {
     case "dev":
@@ -16,19 +15,23 @@ const getBaseUrl = (environment) => {
 const getIntegrationFolder = (teamName) => {
   switch (teamName) {
     case "plasma":
-      return "cypress/integration/plasma";
+      return "cypress/e2e/plasma";
     case "rocket":
-      return "cypress/integration/rocket";
+      return "cypress/e2e/rocket";
     case "skull":
-      return "cypress/integration/skull";
+      return "cypress/e2e/skull";
     default:
-      return "cypress/integration";
+      return "cypress/e2e";
   }
 };
 
-module.exports = (on, config) => {
-  config.baseUrl = getBaseUrl(config.env.environment);
-  config.integrationFolder = getIntegrationFolder(config.env.team);
+module.exports = defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      config.baseUrl = getBaseUrl(config.env.environment);
+      config.specPattern = getIntegrationFolder(config.env.team);
 
-  return config;
-};
+      return config;
+    },
+  },
+});
